@@ -1,19 +1,8 @@
 import { useState } from "react";
-
-const headings = [
-  "Agent Name",
-  "Agent Email",
-  "Status",
-  "Last Seen",
-  "Actions",
-];
-
-interface Agent {
-  name: string;
-  email: string;
-  status: "Active" | "Inactive";
-  lastSeen: string;
-}
+import { Agent } from "../types";
+import AgentForm from "../components/AgentForm";
+import Modal from "../components/Modal";
+import AgentTable from "../components/AgentTable";
 
 const agents: Agent[] = [
   {
@@ -36,88 +25,6 @@ const agents: Agent[] = [
   },
 ];
 
-interface AgentFormProps {
-  agent: Agent | null;
-  onSubmit: (agent: Agent) => void;
-  onCancel: () => void;
-}
-
-function AgentForm({ agent, onSubmit, onCancel }: AgentFormProps) {
-  const [name, setName] = useState(agent?.name || "");
-  const [email, setEmail] = useState(agent?.email || "");
-  const [status, setStatus] = useState<"Active" | "Inactive">(
-    agent?.status || "Active"
-  );
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit({
-      name,
-      email,
-      status,
-      lastSeen: agent?.lastSeen || new Date().toLocaleDateString(),
-    });
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <div className="mb-4">
-        <label className="block text-gray-700" htmlFor="name">
-          Name
-        </label>
-        <input
-          id="name"
-          type="text"
-          className="w-full px-3 py-2 border rounded"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700" htmlFor="email">
-          Email
-        </label>
-        <input
-          id="email"
-          type="email"
-          className="w-full px-3 py-2 border rounded"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700" htmlFor="status">
-          Status
-        </label>
-        <select
-          id="status"
-          className="w-full px-3 py-2 border rounded"
-          value={status}
-          onChange={(e) => setStatus(e.target.value as "Active" | "Inactive")}
-        >
-          <option value="Active">Active</option>
-          <option value="Inactive">Inactive</option>
-        </select>
-      </div>
-      <div className="flex justify-end">
-        <button
-          type="button"
-          className="bg-gray-500 text-white py-2 px-4 rounded mr-2"
-          onClick={onCancel}
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded"
-        >
-          Save
-        </button>
-      </div>
-    </form>
-  );
-}
-
 function Header() {
   return (
     <header className="pt-5 mb-5">
@@ -126,32 +33,6 @@ function Header() {
       </h1>
       <hr className="mt-4 border-gray-300 dark:border-gray-700" />
     </header>
-  );
-}
-
-function Modal({
-  children,
-  isOpen,
-  onClose,
-}: {
-  children: React.ReactNode;
-  isOpen: boolean;
-  onClose: () => void;
-}) {
-  if (!isOpen) return null;
-
-  return (
-    <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-      onClick={onClose}
-    >
-      <div
-        className="bg-white p-5 rounded shadow-lg"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {children}
-      </div>
-    </div>
   );
 }
 
@@ -191,52 +72,11 @@ function App() {
           </button>
         </div>
         <div className="overflow-x-auto">
-          <table className="min-w-full bg-white">
-            <thead>
-              <tr>
-                {headings.map((heading) => (
-                  <th
-                    key={heading}
-                    className="py-2 px-4 bg-gray-200 text-gray-600"
-                  >
-                    {heading}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {agents.map((agent) => (
-                <tr key={agent.email}>
-                  <td className="py-2 px-4 border-b border-gray-200">
-                    {agent.name}
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200">
-                    {agent.email}
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200">
-                    {agent.status}
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200">
-                    {agent.lastSeen}
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200">
-                    <button
-                      onClick={() => handleAgentEdit(agent)}
-                      className="text-blue-500 hover:text-blue-700"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleAgentDelete(agent)}
-                      className="text-red-500 hover:text-red-700 ml-2"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <AgentTable
+            agents={agents}
+            handleAgentEdit={handleAgentEdit}
+            handleAgentDelete={handleAgentDelete}
+          />
         </div>
       </section>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
