@@ -44,4 +44,4 @@ Onto state management:  A simple reducer sufficed here, but I feel the form coul
 
 ## Demo Video
 
-[Demo Video via Loom.com](https://www.loom.com/share/d0caf6b7f02c4c659f541fe8c0676d46?sid=1b1cffd0-8c57-4872-bca2-f5b0a5054055)
+https://www.loom.com/share/d0caf6b7f02c4c659f541fe8c0676d46?sid=528b8f32-1370-4cfc-bcf9-a14d5ff66785
