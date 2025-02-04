@@ -3,27 +3,28 @@ import { Agent } from "../types";
 import AgentForm from "../components/AgentForm";
 import Modal from "../components/Modal";
 import AgentTable from "../components/AgentTable";
+import { useAgentsReducer } from "./reducers/AgentsReducer";
 
-const agents: Agent[] = [
-  {
-    name: "John Doe",
-    email: "john@example.com",
-    status: "Active",
-    lastSeen: "10/01/2023",
-  },
-  {
-    name: "Jane Smith",
-    email: "jane@example.com",
-    status: "Inactive",
-    lastSeen: "09/30/2023",
-  },
-  {
-    name: "Alice Johnson",
-    email: "alice@example.com",
-    status: "Active",
-    lastSeen: "10/02/2023",
-  },
-];
+// const agents: Agent[] = [
+//   {
+//     name: "John Doe",
+//     email: "john@example.com",
+//     status: "Active",
+//     lastSeen: "10/01/2023",
+//   },
+//   {
+//     name: "Jane Smith",
+//     email: "jane@example.com",
+//     status: "Inactive",
+//     lastSeen: "09/30/2023",
+//   },
+//   {
+//     name: "Alice Johnson",
+//     email: "alice@example.com",
+//     status: "Active",
+//     lastSeen: "10/02/2023",
+//   },
+// ];
 
 function Header() {
   return (
@@ -41,6 +42,7 @@ function App() {
   const [agentToEdit, setAgentToEdit] = useState<Agent | null>(null);
   const [agentToDelete, setAgentToDelete] = useState<Agent | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [state, dispatch] = useAgentsReducer();
   const handleAgentDelete = (agent: Agent) => {
     setAgentToDelete(agent);
     setIsDeleteModalOpen(true);
@@ -51,12 +53,23 @@ function App() {
     setIsModalOpen(true);
   };
 
+  const handleAgentFormSubmit = (agent: Agent) => {
+    if (agentToEdit) {
+      dispatch({ type: "EDIT_AGENT", payload: agent });
+    } else {
+      dispatch({ type: "CREATE_AGENT", payload: agent });
+    }
+    setIsModalOpen(false);
+    setAgentToEdit(null);
+  }
+
   const confirmDeleteAgent = () => {
     if (agentToDelete) {
       // Perform the delete operation here
       console.log(`Deleting agent: ${agentToDelete.name}`);
       setIsDeleteModalOpen(false);
       setAgentToDelete(null);
+      dispatch({ type: "DELETE_AGENT", payload: agentToDelete.email });
     }
   };
   return (
@@ -72,17 +85,21 @@ function App() {
           </button>
         </div>
         <div className="overflow-x-auto">
+          {state.length === 0 ? (
+            <p className="text-center text-gray-500">No agents found</p>
+          ) : (
           <AgentTable
-            agents={agents}
+            agents={state}
             handleAgentEdit={handleAgentEdit}
             handleAgentDelete={handleAgentDelete}
           />
+        )}
         </div>
       </section>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <AgentForm
           agent={agentToEdit}
-          onSubmit={() => {}}
+          onSubmit={handleAgentFormSubmit}
           onCancel={() => setIsModalOpen(false)}
         />
       </Modal>

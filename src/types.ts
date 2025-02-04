@@ -17,4 +17,11 @@ interface AgentTableProps {
   handleAgentDelete: (agent: Agent) => void;
 }
 
-export type { Agent, AgentFormProps, AgentTableProps };
+type State = Agent[];
+
+type Action =
+  | { type: 'CREATE_AGENT'; payload: Agent }
+  | { type: 'EDIT_AGENT'; payload: Agent }
+  | { type: 'DELETE_AGENT'; payload: string };
+
+export type { Agent, AgentFormProps, AgentTableProps, State, Action };
