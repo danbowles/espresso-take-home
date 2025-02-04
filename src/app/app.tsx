@@ -159,16 +159,16 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [agentToEdit, setAgentToEdit] = useState<Agent | null>(null);
   const [agentToDelete, setAgentToDelete] = useState<Agent | null>(null);
-      const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-      const handleAgentDelete = (agent: Agent) => {
-        setAgentToDelete(agent);
-        setIsDeleteModalOpen(true);
-      };
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const handleAgentDelete = (agent: Agent) => {
+    setAgentToDelete(agent);
+    setIsDeleteModalOpen(true);
+  };
 
   const handleAgentEdit = (agent: Agent) => {
     setAgentToEdit(agent);
     setIsModalOpen(true);
-  }
+  };
 
   const confirmDeleteAgent = () => {
     if (agentToDelete) {
@@ -220,10 +220,16 @@ function App() {
                     {agent.lastSeen}
                   </td>
                   <td className="py-2 px-4 border-b border-gray-200">
-                    <button onClick={() => handleAgentEdit(agent)}className="text-blue-500 hover:text-blue-700">
+                    <button
+                      onClick={() => handleAgentEdit(agent)}
+                      className="text-blue-500 hover:text-blue-700"
+                    >
                       Edit
                     </button>
-                    <button onClick={() => handleAgentDelete(agent)} className="text-red-500 hover:text-red-700 ml-2">
+                    <button
+                      onClick={() => handleAgentDelete(agent)}
+                      className="text-red-500 hover:text-red-700 ml-2"
+                    >
                       Delete
                     </button>
                   </td>
@@ -241,7 +247,10 @@ function App() {
         />
       </Modal>
 
-      <Modal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)}>
+      <Modal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+      >
         <div>
           <h2 className="text-xl font-bold mb-4">Confirm Delete</h2>
           <p>Are you sure you want to delete {agentToDelete?.name}?</p>
