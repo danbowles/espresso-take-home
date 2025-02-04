@@ -6,4 +6,7 @@ const TABLE_HEADERS = [
   "Actions",
 ];
 
-export { TABLE_HEADERS };
+// source: https://stackoverflow.com/a/50343015
+const EMAIL_REGEX = /^[^@]+@[^@]+\.[^@]+$/;
+
+export { TABLE_HEADERS, EMAIL_REGEX };

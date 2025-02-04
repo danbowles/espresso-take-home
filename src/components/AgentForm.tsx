@@ -1,15 +1,32 @@
+import { EMAIL_REGEX } from "../constants";
 import { AgentFormProps } from "../types";
 import { useState } from "react";
 
 function AgentForm({ agent, onSubmit, onCancel }: AgentFormProps) {
+
   const [name, setName] = useState(agent?.name || "");
   const [email, setEmail] = useState(agent?.email || "");
   const [status, setStatus] = useState<"Active" | "Inactive">(
     agent?.status || "Active"
   );
 
+  const isFormValid = () => {
+    if (!name.trim()) {
+      alert("Name cannot be empty");
+      return false;
+    }
+    if (!EMAIL_REGEX.test(String(email).toLowerCase())) {
+      alert("Invalid email address");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isFormValid()) {
+      return;
+    }
     onSubmit({
       name,
       email,

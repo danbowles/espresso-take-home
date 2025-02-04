@@ -18,8 +18,6 @@ const agentsReducer = (state: State, action: Action): State => {
     default:
       throw new Error('Unknown action type');
   }
-  console.log('Saving agents to local storage from reducer');
-  localStorage.setItem('espresso-agents', JSON.stringify(newState));
   return newState;
 };
 
@@ -27,7 +25,6 @@ export const useAgentsReducer = () => {
   const [state, dispatch] = useReducer(agentsReducer, initialState);
 
   useEffect(() => {
-    console.log('Saving agents to local storage');
     localStorage.setItem('espresso-agents', JSON.stringify(state));
   }, [state]);
 
